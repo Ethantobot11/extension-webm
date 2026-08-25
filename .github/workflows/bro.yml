@@ -35,7 +35,7 @@ jobs:
             target: mac
           - platform: android
             os: ubuntu-latest
-            target: "android -release -nocolor -nocffi"
+            target: "android"
           - platform: ios
             os: macos-15
             target: "ios -release -nocolor -nocffi"
@@ -78,7 +78,7 @@ jobs:
           haxelib git hxcpp https://github.com/ShadowEngineTeam/hxcpp --quiet
           haxelib git format https://github.com/HaxeFoundation/format --quiet
           haxelib git hxp https://github.com/openfl/hxp --quiet
-          haxelib git lime https://github.com/ArkoseLabsOfficial/lime --quiet
+          haxelib git lime https://github.com/openfl/lime --quiet
           haxelib install openfl --quiet
           haxelib run lime setup -alias -y --quiet
 
@@ -93,7 +93,7 @@ jobs:
           haxelib run lime config JAVA_HOME $JAVA_HOME_17_X64
           haxelib run lime config ANDROID_SETUP true
 
-      - name: Rebuild Lime & NDLL (Standard Targets)
+      - name: Rebuild Lime & NDLL (Standard & Android Targets)
         if: matrix.platform != 'mac'
         shell: bash
         run: |
@@ -106,9 +106,11 @@ jobs:
         shell: bash
         run: |
           rm -rf ndll/
+          haxelib run lime rebuild . mac -32 -release -nocolor -nocffi -D HXCPP_M32
           haxelib run lime rebuild lime mac -64 -release -nocolor -nocffi -D HXCPP_M64
           haxelib run lime rebuild lime mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64
-          
+
+          haxelib run lime rebuild . mac -32 -release -nocolor -nocffi -D HXCPP_M32 -clean
           haxelib run lime rebuild . mac -64 -release -nocolor -nocffi -D HXCPP_M64 -clean
           haxelib run lime rebuild . mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64
           
