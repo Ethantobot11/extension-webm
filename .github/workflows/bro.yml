@@ -84,6 +84,14 @@ jobs:
           haxelib git hxp https://github.com/openfl/hxp --quiet
           haxelib install openfl --quiet
           haxelib install hxcpp --quiet
+
+          if [ "${{ matrix.platform }}" == "mac" ]; then
+            haxelib run lime rebuild lime mac -64 -release -nocolor -nocffi -D HXCPP_M64
+            haxelib run lime rebuild lime mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64
+          else
+            haxelib run lime rebuild lime ${{ matrix.target }}
+          fi
+          
           haxelib run lime setup -alias -y --quiet
 
       - name: Enable HXCPP compile cache
