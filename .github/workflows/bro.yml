@@ -164,10 +164,9 @@ jobs:
 
       - name: Organize Artifacts into Root NDLL Folder
         run: |
-          mkdir -p new-ndll
-          find downloaded-ndlls -mindepth 2 -maxdepth 2 -type d -exec cp -r {} new-ndll/ \;
-          rm -rf ndll
-          mv new-ndll ndll
+          rm -rf ndll/*
+          cp -r downloaded-ndlls/ndll-*/* ndll/
+          rm -rf ndll/ndll
           ls -R ndll/
 
       - name: Auto-Commit and Push Binaries
