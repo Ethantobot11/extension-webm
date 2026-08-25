@@ -144,6 +144,7 @@ jobs:
           haxelib run lime rebuild . ios -release -nocolor -nocffi
           if [ -f "ndll/iPhone/libextension-webm.iphoneos-arm64.a" ]; then
             cp ndll/iPhone/libextension-webm.iphoneos-arm64.a ndll/iPhone/libextension-webm.iphoneos.a
+            cp ndll/iPhone/libextension-webm.iphoneos-arm64.a ndll/iPhone/libextension-webm.a
           fi
           ls -R ndll/
 
