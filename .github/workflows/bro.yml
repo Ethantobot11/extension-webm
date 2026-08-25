@@ -79,7 +79,7 @@ jobs:
       - name: Install Haxe Dependencies
         run: |
           haxelib setup ~/haxelib
-          haxelib install lime --quiet
+          haxelib git lime https://github.com/openfl/lime.git --quiet
           haxelib install openfl --quiet
           haxelib install hxcpp --quiet
           haxelib run lime setup -y --quiet
