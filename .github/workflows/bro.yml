@@ -84,7 +84,7 @@ jobs:
           haxelib git hxp https://github.com/openfl/hxp --quiet
           haxelib install openfl --quiet
           haxelib install hxcpp --quiet
-          haxelib run lime setup -y --quiet
+          haxelib run lime setup -alias -y --quiet
 
       - name: Enable HXCPP compile cache
         run: echo "HXCPP_COMPILE_CACHE=~/.hxcpp" >> $GITHUB_ENV
