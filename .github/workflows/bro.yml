@@ -99,7 +99,7 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Rebuild Lime & NDLL (Standard Targets)
-        if: matrix.platform != 'mac' && matrix.platform != 'android'
+        if: matrix.platform != 'mac' && matrix.platform != 'android' && matrix.platform != 'ios'
         shell: bash
         run: |
           rm -rf ndll/
@@ -134,6 +134,17 @@ jobs:
           haxelib run lime rebuild . mac -64 -release -nocolor -nocffi -D HXCPP_M64 -clean
           haxelib run lime rebuild . mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64 -clean
           
+          ls -R ndll/
+
+      - name: Rebuild Lime & NDLL (iOS)
+        if: matrix.platform == 'ios'
+        shell: bash
+        run: |
+          rm -rf ndll/
+          haxelib run lime rebuild . ios -release -nocolor -nocffi
+          if [ -f "ndll/iPhone/libextension-webm.iphoneos-arm64.a" ]; then
+            cp ndll/iPhone/libextension-webm.iphoneos-arm64.a ndll/iPhone/libextension-webm.iphoneos.a
+          fi
           ls -R ndll/
 
       - name: Upload Artifacts
