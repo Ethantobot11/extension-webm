@@ -62,7 +62,7 @@ jobs:
         id: setup-ndk
         uses: nttld/setup-ndk@main
         with:
-          ndk-version: r21c
+          ndk-version: r26
           add-to-path: false
 
       - name: Install 32-bit Dependencies
@@ -123,11 +123,9 @@ jobs:
         shell: bash
         run: |
           rm -rf ndll/
-          haxelib run lime rebuild lime mac -32 -release -nocolor -nocffi -D HXCPP_M32
           haxelib run lime rebuild lime mac -64 -release -nocolor -nocffi -D HXCPP_M64
           haxelib run lime rebuild lime mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64
           
-          haxelib run lime rebuild . mac -32 -release -nocolor -nocffi -D HXCPP_M32 -clean
           haxelib run lime rebuild . mac -64 -release -nocolor -nocffi -D HXCPP_M64 -clean
           haxelib run lime rebuild . mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64 -clean
           
