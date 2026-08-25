@@ -140,10 +140,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ndll-${{ matrix.platform }}
-          path: |
-            ndll/
-            **/ndll/
-            !**/.gitignore
+          path: ndll/
           if-no-files-found: error
 
   commit-ndlls:
@@ -164,9 +161,9 @@ jobs:
 
       - name: Organize Artifacts into Root NDLL Folder
         run: |
-          rm -rf ndll/*
+          mkdir -p ndll
           cp -r downloaded-ndlls/ndll-*/* ndll/
-          rm -rf ndll/ndll
+          rm -rf downloaded-ndlls
           ls -R ndll/
 
       - name: Auto-Commit and Push Binaries
