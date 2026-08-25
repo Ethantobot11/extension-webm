@@ -97,7 +97,8 @@ jobs:
 
       - name: Rebuild NDLL
         run: |
-          haxelib run lime rebuild . ${{ matrix.target }}
+          rm -rf ndll/
+          haxelib run lime rebuild . ${{ matrix.target }} -clean
 
       - name: Upload Artifacts (Backup)
         uses: actions/upload-artifact@v4
