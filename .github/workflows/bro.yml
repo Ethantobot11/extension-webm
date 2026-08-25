@@ -96,12 +96,9 @@ jobs:
           haxelib run lime config ANDROID_SETUP true
 
       - name: Rebuild NDLL
+        shell: bash
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            cmd /c "if exist ndll rmdir /s /q ndll"
-          else
-            rm -rf ndll/
-          fi
+          rm -rf ndll/
           haxelib run lime rebuild . ${{ matrix.target }} -clean
 
       - name: Upload Artifacts (Backup)
