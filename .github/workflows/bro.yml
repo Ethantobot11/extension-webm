@@ -17,31 +17,25 @@ jobs:
         include:
           - platform: windows
             os: windows-latest
-            target: windows
+            target: 'windows -release -nocolor -nocffi'
           - platform: windows64
             os: windows-latest
-            target: windows -64
+            target: 'windows -64 -release -nocolor -nocffi'
           - platform: linux
             os: ubuntu-latest
-            target: linux
+            target: 'linux -release -nocolor -nocffi'
           - platform: linux64
             os: ubuntu-latest
-            target: linux -64
+            target: 'linux -64 -release -nocolor -nocffi'
           - platform: mac
             os: macos-15
-            target: "mac -64 -release"
-          - platform: mac64
-            os: macos-15
-            target: "mac -arm64 -release"
-          - platform: mac-arm64
-            os: macos-15
-            target: mac
+            target: 'mac -release -nocolor -nocffi'
           - platform: android
             os: ubuntu-latest
-            target: android
+            target: 'android -release -nocolor -nocffi'
           - platform: ios
             os: macos-15
-            target: ios
+            target: 'ios -release -nocolor -nocffi'
 
     steps:
       - name: Checkout Repository
@@ -50,19 +44,19 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Haxe
-        if: (matrix.platform == 'android' || matrix.platform == 'windows' || matrix.platform == 'windows64' || matrix.platform == 'linux' || matrix.platform == 'linux64')
+        if: matrix.platform != 'mac' && matrix.platform != 'ios'
         uses: krdlab/setup-haxe@v1
         with:
           haxe-version: 4.3.6
 
-      - name: Setup Haxe
-        if: (matrix.platform == 'ios' || matrix.platform == 'mac' || matrix.platform == 'mac64'  || matrix.platform == 'mac-arm64')
+      - name: Setup Haxe (Mac/iOS)
+        if: matrix.platform == 'mac' || matrix.platform == 'ios'
         uses: krdlab/setup-haxe@master
         with:
           haxe-version: 4.3.6
 
       - name: Select Xcode Path
-        if: matrix.platform == 'mac' || matrix.platform == 'mac64' || matrix.platform == 'ios'
+        if: matrix.platform == 'mac' || matrix.platform == 'ios'
         run: |
           sudo xcode-select -s /Applications/Xcode.app
           sudo xcodebuild -runFirstLaunch
@@ -98,11 +92,20 @@ jobs:
           haxelib run lime config JAVA_HOME $JAVA_HOME_17_X64
           haxelib run lime config ANDROID_SETUP true
 
-      - name: Rebuild NDLL
+      - name: Rebuild NDLL (Standard Targets)
+        if: matrix.platform != 'mac'
         shell: bash
         run: |
           rm -rf ndll/
           haxelib run lime rebuild . ${{ matrix.target }} -clean
+
+      - name: Rebuild NDLL (Mac Multi-Architecture)
+        if: matrix.platform == 'mac'
+        shell: bash
+        run: |
+          rm -rf ndll/
+          haxelib run lime rebuild mac -64 -release -nocolor -nocffi -D HXCPP_M64 -clean
+          haxelib run lime rebuild mac -arm64 -release -nocolor -nocffi -D HXCPP_ARM64 -clean
 
       - name: Upload Artifacts (Backup)
         uses: actions/upload-artifact@v4
