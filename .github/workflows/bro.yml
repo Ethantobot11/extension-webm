@@ -29,10 +29,13 @@ jobs:
             target: linux -64
           - platform: mac
             os: macos-15
-            target: mac
+            target: "mac -64 -release"
           - platform: mac64
             os: macos-15
-            target: mac -64
+            target: "mac -arm64 -release"
+          - platform: mac-arm64
+            os: macos-15
+            target: mac
           - platform: android
             os: ubuntu-latest
             target: android
