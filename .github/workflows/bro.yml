@@ -97,7 +97,11 @@ jobs:
 
       - name: Rebuild NDLL
         run: |
-          rm -rf ndll/
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            cmd /c "if exist ndll rmdir /s /q ndll"
+          else
+            rm -rf ndll/
+          fi
           haxelib run lime rebuild . ${{ matrix.target }} -clean
 
       - name: Upload Artifacts (Backup)
